@@ -5,12 +5,11 @@ export default class NameForm extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      value: '',
-      value1: '',
+      from: '',
+      to: '',
       class: 'off'
     }
-    this.handleChangeFrom = this.handleChangeFrom.bind(this)
-    this.handleChangeTo = this.handleChangeTo.bind(this)
+    this.handleChangeInput = this.handleChangeInput.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
   }
   componentWillReceiveProps (nextProps) {
@@ -25,23 +24,23 @@ export default class NameForm extends Component {
   componentWillUnmount () {
     console.log('FormcomponentWillUnmount()')
   }
-  handleChangeTo (event) {
-    this.setState({ value1: event.target.value })
-  }
+  handleChangeInput (event) {
+    const target = event.target
+    const name = target.name
 
-  handleChangeFrom (event) {
-    this.setState({ value: event.target.value })
+    this.setState({
+      [name]: target.value
+    })
   }
 
   handleSubmit (event) {
     // 2018-09-06
     axios
       .get(
-        `https://us-central1-dokis-12eaa.cloudfunctions.net/generateHits?start=${this.state.value}&end=${this.state.value1}`
+        `https://us-central1-dokis-12eaa.cloudfunctions.net/generateHits?start=${this.state.from}&end=${this.state.to}`
       )
       .then(response => {
         this.props.updateData(response.data)
-        console.log(response.data)
       })
 
     event.preventDefault()
@@ -51,19 +50,21 @@ export default class NameForm extends Component {
     return (
       <div>
         <h1>Hello</h1>
-        <form class='olo' onSubmit={this.handleSubmit}>
+        <form onSubmit={this.handleSubmit}>
           <label>
             From:
             <input
+              name='from'
               type='text'
-              value={this.state.value}
-              onChange={this.handleChangeFrom}
+              value={this.state.from}
+              onChange={this.handleChangeInput}
             />
             To:
             <input
+              name='to'
               type='text'
-              value={this.state.value1}
-              onChange={this.handleChangeTo}
+              value={this.state.to}
+              onChange={this.handleChangeInput}
             />
           </label>
           <input type='submit' value='Submit' />

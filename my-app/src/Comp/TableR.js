@@ -2,9 +2,6 @@ import React, { Component } from 'react'
 import axios from 'axios'
 
 export default class TableR extends Component {
-  state = {
-    name: 'Бумеранг вернулся назад'
-  }
   componentWillReceiveProps (nextProps) {
     console.log('TablecomponentWillReceiveProps()')
   }

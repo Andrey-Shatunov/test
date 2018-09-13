@@ -30,31 +30,21 @@ class App extends Component {
   componentWillUnmount () {
     console.log('componentWillUnmount()')
   }
+
   updateData = value => {
     this.setState({
       data: value
     })
   }
+
   press () {
     this.setState(prevState => ({ childVisible: !prevState.childVisible }))
   }
+
   render () {
     return (
       <div className='App'>
-        {this.state.childVisible}
-        {this.state.childVisible
-          ? <NameForm updateData={this.updateData} />
-          : null}
-
-        {/* <TableR /> */}
-        {/* <header className='App-header'>
-          <img src={logo} className='App-logo' alt='logo' />
-          <h1 className='App-title'>Welcome to React</h1>
-        </header>
-        <p className='App-intro'>
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p> */}
-
+        {this.state.childVisible && <NameForm updateData={this.updateData} />}
         <TableR data={this.state.data} />
         <button onClick={this.press}>
           {this.state.label}
