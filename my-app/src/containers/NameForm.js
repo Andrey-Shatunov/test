@@ -1,14 +1,11 @@
 import React, { Component } from 'react'
 import axios from 'axios'
+import store from '../store/store'
+import { connect } from 'react-redux'
 
-export default class NameForm extends Component {
+class NameForm extends Component {
   constructor (props) {
     super(props)
-    this.state = {
-      from: '',
-      to: '',
-      class: 'off'
-    }
     this.handleChangeInput = this.handleChangeInput.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
   }
@@ -27,20 +24,23 @@ export default class NameForm extends Component {
   handleChangeInput (event) {
     const target = event.target
     const name = target.name
-
-    this.setState({
-      [name]: target.value
-    })
+    // console.log('UPDATE_FORM')
+    // console.log(name)
+    store.dispatch({ type: 'UPDATE_FORM', name: [name], [name]: target.value })
+    // this.setState({
+    //   [name]: target.value
+    // })
   }
 
   handleSubmit (event) {
     // 2018-09-06
     axios
       .get(
-        `https://us-central1-dokis-12eaa.cloudfunctions.net/generateHits?start=${this.state.from}&end=${this.state.to}`
+        `https://us-central1-dokis-12eaa.cloudfunctions.net/generateHits?start=${this.props.from}&end=${this.props.to}`
       )
       .then(response => {
-        this.props.updateData(response.data)
+        // this.props.updateData(response.data)
+        store.dispatch({ type: 'ADD_DATA', data: response.data })
       })
 
     event.preventDefault()
@@ -56,14 +56,14 @@ export default class NameForm extends Component {
             <input
               name='from'
               type='text'
-              value={this.state.from}
+              value={this.props.from}
               onChange={this.handleChangeInput}
             />
             To:
             <input
               name='to'
               type='text'
-              value={this.state.to}
+              value={this.props.to}
               onChange={this.handleChangeInput}
             />
           </label>
@@ -73,3 +73,17 @@ export default class NameForm extends Component {
     )
   }
 }
+
+// const mapStateToProps = function (store) {
+//   return {
+//     data: store.data
+//   }
+// }
+
+const mapStateToProps = function (state) {
+  return {
+    from: state.workWithForm.from,
+    to: state.workWithForm.to
+  }
+}
+export default connect(mapStateToProps)(NameForm)

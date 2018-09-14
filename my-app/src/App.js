@@ -1,20 +1,13 @@
 import React, { Component } from 'react'
 // import logo from './logo.svg'
 import './App.css'
-import NameForm from './Comp/NameForm.js'
-import TableR from './Comp/TableR.js'
-// import axios from 'axios'
-
+import NameForm from './containers/NameForm.js'
+import TableR from './containers/TableR.js'
+import { connect } from 'react-redux'
+import store from './store/store'
 class App extends Component {
   constructor (props) {
     super(props)
-
-    this.state = {
-      data: [],
-      childVisible: true,
-      label: 'Скрыть/Показать'
-    }
-
     this.press = this.press.bind(this)
   }
 
@@ -31,27 +24,31 @@ class App extends Component {
     console.log('componentWillUnmount()')
   }
 
-  updateData = value => {
-    this.setState({
-      data: value
-    })
-  }
-
   press () {
-    this.setState(prevState => ({ childVisible: !prevState.childVisible }))
+    // this.setState(prevState => ({ childVisible: !prevState.childVisible }))
+    store.dispatch({
+      type: 'UPDATE_VISIBLE',
+      childVisible: this.props.childVisible
+    })
   }
 
   render () {
     return (
       <div className='App'>
-        {this.state.childVisible && <NameForm updateData={this.updateData} />}
-        <TableR data={this.state.data} />
+        {this.props.childVisible && <NameForm />}
+        <TableR />
         <button onClick={this.press}>
-          {this.state.label}
+          {this.props.label}
         </button>
       </div>
     )
   }
 }
 
-export default App
+const mapStateToProps = function (state) {
+  return {
+    childVisible: state.workWithApp.childVisible,
+    label: state.workWithApp.label
+  }
+}
+export default connect(mapStateToProps)(App)

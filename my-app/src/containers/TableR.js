@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
-import axios from 'axios'
+import { connect } from 'react-redux'
 
-export default class TableR extends Component {
+class TableR extends Component {
   componentWillReceiveProps (nextProps) {
     console.log('TablecomponentWillReceiveProps()')
   }
@@ -38,3 +38,9 @@ export default class TableR extends Component {
     )
   }
 }
+const mapStateToProps = function (state) {
+  return {
+    data: state.workWithData.data
+  }
+}
+export default connect(mapStateToProps)(TableR)
