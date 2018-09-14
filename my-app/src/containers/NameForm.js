@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import axios from 'axios'
 import store from '../store/store'
 import { connect } from 'react-redux'
+import { addData, updateForm } from '../actions/SimpleAction'
 
 class NameForm extends Component {
   constructor (props) {
@@ -26,7 +27,7 @@ class NameForm extends Component {
     const name = target.name
     // console.log('UPDATE_FORM')
     // console.log(name)
-    store.dispatch({ type: 'UPDATE_FORM', name: [name], [name]: target.value })
+    store.dispatch(updateForm([name], target.value))
     // this.setState({
     //   [name]: target.value
     // })
@@ -40,7 +41,7 @@ class NameForm extends Component {
       )
       .then(response => {
         // this.props.updateData(response.data)
-        store.dispatch({ type: 'ADD_DATA', data: response.data })
+        store.dispatch(addData(response.data))
       })
 
     event.preventDefault()

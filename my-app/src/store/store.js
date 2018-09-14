@@ -21,7 +21,6 @@ function workWithApp (state, action) {
   }
   switch (action.type) {
     case 'UPDATE_VISIBLE':
-      console.log(action.childVisible)
       return { ...state, childVisible: !action.childVisible }
     default:
       return state

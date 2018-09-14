@@ -5,6 +5,8 @@ import NameForm from './containers/NameForm.js'
 import TableR from './containers/TableR.js'
 import { connect } from 'react-redux'
 import store from './store/store'
+
+import { updateVisible } from './actions/SimpleAction'
 class App extends Component {
   constructor (props) {
     super(props)
@@ -26,10 +28,7 @@ class App extends Component {
 
   press () {
     // this.setState(prevState => ({ childVisible: !prevState.childVisible }))
-    store.dispatch({
-      type: 'UPDATE_VISIBLE',
-      childVisible: this.props.childVisible
-    })
+    store.dispatch(updateVisible(this.props.childVisible))
   }
 
   render () {

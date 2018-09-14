@@ -6,3 +6,19 @@ export function addData (data) {
     data
   }
 }
+
+export function updateVisible (childVisible) {
+  console.log(types.UPDATE_VISIBLE)
+  return {
+    type: types.UPDATE_VISIBLE,
+    childVisible
+  }
+}
+
+export function updateForm (name, fromTo) {
+  return {
+    type: types.UPDATE_FORM,
+    name,
+    [name]: fromTo
+  }
+}
