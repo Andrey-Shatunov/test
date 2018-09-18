@@ -1,52 +1,6 @@
-import { createStore, combineReducers } from 'redux'
-
-function workWithData (state, action) {
-  if (typeof state === 'undefined') {
-    return { data: [] }
-  }
-  switch (action.type) {
-    case 'ADD_DATA':
-      return { ...state, data: action.data }
-    default:
-      return state
-  }
-}
-
-function workWithApp (state, action) {
-  if (typeof state === 'undefined') {
-    return {
-      childVisible: true,
-      label: 'Скрыть/Показать'
-    }
-  }
-  switch (action.type) {
-    case 'UPDATE_VISIBLE':
-      return { ...state, childVisible: !action.childVisible }
-    default:
-      return state
-  }
-}
-
-function workWithForm (state, action) {
-  if (typeof state === 'undefined') {
-    return {
-      from: '',
-      to: ''
-    }
-  }
-  switch (action.type) {
-    case 'UPDATE_FORM':
-      switch (action.name[0]) {
-        case 'from':
-          return { ...state, from: action.from }
-        case 'to':
-          return { ...state, to: action.to }
-      }
-      return { ...state }
-    default:
-      return state
-  }
-}
+import { createStore, combineReducers, applyMiddleware, compose } from 'redux'
+import thunk from 'redux-thunk'
+import { workWithData, workWithApp, workWithForm } from '../redusers/redusers'
 
 const reducers = combineReducers({
   workWithData: workWithData,
@@ -54,7 +8,21 @@ const reducers = combineReducers({
   workWithForm: workWithForm
 })
 
-const store = createStore(reducers)
+const initialState = {}
+
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
+const store = createStore(
+  reducers,
+  initialState,
+  /* preloadedState, */ composeEnhancers(applyMiddleware(thunk))
+)
+// const store = createStore(
+//   reducers,
+//   initialState,
+//   applyMiddleware(thunk),
+//   window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+// )
+
 // var store = createStore(workWithData)
 
 export default store

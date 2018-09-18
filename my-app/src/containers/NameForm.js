@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import axios from 'axios'
 import store from '../store/store'
 import { connect } from 'react-redux'
-import { addData, updateForm } from '../actions/SimpleAction'
+import { updateForm, getHits } from '../actions/SimpleAction'
 
 class NameForm extends Component {
   constructor (props) {
@@ -27,7 +27,8 @@ class NameForm extends Component {
     const name = target.name
     // console.log('UPDATE_FORM')
     // console.log(name)
-    store.dispatch(updateForm([name], target.value))
+    this.props.sendInput([name], target.value)
+    // store.dispatch(updateForm([name], target.value))
     // this.setState({
     //   [name]: target.value
     // })
@@ -35,14 +36,16 @@ class NameForm extends Component {
 
   handleSubmit (event) {
     // 2018-09-06
-    axios
-      .get(
-        `https://us-central1-dokis-12eaa.cloudfunctions.net/generateHits?start=${this.props.from}&end=${this.props.to}`
-      )
-      .then(response => {
-        // this.props.updateData(response.data)
-        store.dispatch(addData(response.data))
-      })
+    this.props.sendData(this.props.from, this.props.to)
+    // axios
+    //   .get(
+    //     `https://us-central1-dokis-12eaa.cloudfunctions.net/generateHits?start=${this.props.from}&end=${this.props.to}`
+    //   )
+    //   .then(response => {
+    //     // this.props.updateData(response.data)
+    //     // store.dispatch(addData(response.data))
+    //     this.props.sendData(response.data)
+    //   })
 
     event.preventDefault()
   }
@@ -87,4 +90,14 @@ const mapStateToProps = function (state) {
     to: state.workWithForm.to
   }
 }
-export default connect(mapStateToProps)(NameForm)
+const mapDispatchToProps = function (dispatch) {
+  return {
+    sendData: (from, to) => {
+      dispatch(getHits(from, to))
+    },
+    sendInput: (name, value) => {
+      dispatch(updateForm(name, value))
+    }
+  }
+}
+export default connect(mapStateToProps, mapDispatchToProps)(NameForm)

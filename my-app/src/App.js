@@ -4,13 +4,12 @@ import './App.css'
 import NameForm from './containers/NameForm.js'
 import TableR from './containers/TableR.js'
 import { connect } from 'react-redux'
-import store from './store/store'
 
 import { updateVisible } from './actions/SimpleAction'
 class App extends Component {
   constructor (props) {
     super(props)
-    this.press = this.press.bind(this)
+    // this.press = this.press.bind(this)
   }
 
   componentWillReceiveProps (nextProps) {
@@ -26,9 +25,11 @@ class App extends Component {
     console.log('componentWillUnmount()')
   }
 
-  press () {
+  press = () => {
     // this.setState(prevState => ({ childVisible: !prevState.childVisible }))
-    store.dispatch(updateVisible(this.props.childVisible))
+    return dispatch => {
+      dispatch(updateVisible(this.props.childVisible))
+    }
   }
 
   render () {
@@ -36,7 +37,7 @@ class App extends Component {
       <div className='App'>
         {this.props.childVisible && <NameForm />}
         <TableR />
-        <button onClick={this.press}>
+        <button onClick={() => this.props.dispatch(this.press())}>
           {this.props.label}
         </button>
       </div>
